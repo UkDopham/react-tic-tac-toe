@@ -3,22 +3,24 @@ import './Board.css';
 import Square from '../Square/Square';
 
 interface BoardProps {
+    squares: any;
+    xIsNext: boolean
+    handlePlay: any;
 }
 
-const Board: React.FC<BoardProps> = () => {
-    const [xIsNext, setXIsNext] = useState(true);
-    const [squares, setSquares] = useState(Array(9).fill(''));
-
+const Board: React.FC<BoardProps> = ({ squares, xIsNext, handlePlay }) => {
     function handleClick(i: number) {
-        if (squares[i] !== '' || calculateWinner(squares)) {
+        if (calculateWinner(squares) || squares[i]) {
             return;
         }
         const nextSquares = squares.slice();
-        nextSquares[i] = xIsNext ? "X" : "O";
-        setXIsNext(!xIsNext);
-        setSquares(nextSquares);
+        if (xIsNext) {
+            nextSquares[i] = "X";
+        } else {
+            nextSquares[i] = "O";
+        }
+        handlePlay(nextSquares);
     }
-
     const winner = calculateWinner(squares);
     let status;
     if (winner) {
@@ -29,7 +31,9 @@ const Board: React.FC<BoardProps> = () => {
 
     return (
         <div className='board'>
-            <div className="status">{status}</div>
+            <div>
+                {status}
+            </div>
             <div className='board-row'>
                 <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
                 <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
@@ -68,5 +72,4 @@ function calculateWinner(squares: any) {
     }
     return null;
 }
-
 export default Board;
