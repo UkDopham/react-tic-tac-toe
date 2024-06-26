@@ -29,26 +29,37 @@ const Board: React.FC<BoardProps> = ({ squares, xIsNext, handlePlay }) => {
         status = "Next player: " + (xIsNext ? "X" : "O");
     }
 
+    const renderRow = (row : number) => {
+        const rows: any[] = [];
+        for (var column = 0;
+            column < 3;
+            column++) {
+                var index = row*3 + column;
+                rows.push(
+                    <Square value={squares[index]} onSquareClick={() => handleClick(index)} />
+            )
+        }
+        return rows;
+
+    }
+    const renderBoard = () => {
+        const board: any[] = [];
+        for (var row = 0;
+            row < 3;
+            row++) {
+            board.push(
+                <div className='board-row'>{renderRow(row)}</div>
+            )
+        }
+        return board;
+    }
+
     return (
         <div className='board'>
             <div>
                 {status}
             </div>
-            <div className='board-row'>
-                <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
-                <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
-                <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
-            </div>
-            <div className='board-row'>
-                <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
-                <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
-                <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
-            </div>
-            <div className='board-row'>
-                <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
-                <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
-                <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
-            </div>
+            {renderBoard()}
         </div>
     );
 };
